@@ -1,4 +1,4 @@
-package com.demo;
+package com.demo.echo;
 
 import java.net.InetSocketAddress;
 

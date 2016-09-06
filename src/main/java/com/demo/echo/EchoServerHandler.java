@@ -1,15 +1,18 @@
-package com.demo.chart;
+package com.demo.echo;
 
 import java.util.Date;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
+import io.netty.util.ReferenceCountUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
-public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
+public class EchoServerHandler extends ChannelInboundHandlerAdapter {
+	
 	public static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
 	@Override
@@ -31,21 +34,29 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
 	}
 
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, String s) throws Exception {
-		Channel incoming = ctx.channel();
-		for (Channel channel : channels) {
-			if (channel != incoming) {
-				channel.writeAndFlush("[" + incoming.remoteAddress() + "]" + s + "\n");
-			} else {
-				channel.writeAndFlush("[you]" + s + "\n");
-			}
-		}
-	}
-
-	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		Channel incoming = ctx.channel();
 		System.out.println("Client:" + incoming.remoteAddress() + "在线");
+	}
+	
+	@Override
+	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+		// TODO Auto-generated method stub
+		super.channelRead(ctx, msg);
+		Channel channel = ctx.channel();
+		System.out.println("Msg from " + channel.remoteAddress() + " " + msg.toString());
+	}
+
+	@Override
+	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+		// TODO Auto-generated method stub
+		super.channelReadComplete(ctx);
+	}
+
+	@Override
+	public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+		// TODO Auto-generated method stub
+		super.userEventTriggered(ctx, evt);
 	}
 
 	@Override
@@ -62,5 +73,4 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
 		cause.printStackTrace();
 		ctx.close();
 	}
-
 }

@@ -1,4 +1,4 @@
-package com.demo.chart;
+package com.demo.echo;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -7,10 +7,10 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-public class ChatServer {
+public class EchoServer {
 	private int port;
 
-	public ChatServer(int port) {
+	public EchoServer(int port) {
 		this.port = port;
 	}
 
@@ -21,11 +21,9 @@ public class ChatServer {
 		try {
 			ServerBootstrap b = new ServerBootstrap();
 			b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
-					.childHandler(new ChatServerInitializer())
+					.childHandler(new EchoServerInitializer())
 					.option(ChannelOption.SO_BACKLOG, 128)
 					.childOption(ChannelOption.SO_KEEPALIVE, true);
-
-			System.out.println("ChatServer 启动了");
 
 			// 绑定端口，开始接收进来的连接
 			ChannelFuture f = b.bind(port).sync();
@@ -38,7 +36,7 @@ public class ChatServer {
 			workerGroup.shutdownGracefully();
 			bossGroup.shutdownGracefully();
 
-			System.out.println("ChatServer 关闭了");
+			System.out.println("SimpleChatServer 关闭了");
 		}
 	}
 
@@ -49,7 +47,7 @@ public class ChatServer {
 		} else {
 			port = 8080;
 		}
-		new ChatServer(port).run();
+		new EchoServer(port).run();
 
 	}
 }

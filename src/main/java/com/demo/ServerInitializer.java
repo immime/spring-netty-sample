@@ -1,4 +1,4 @@
-package com.demo.chart;
+package com.demo;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -7,8 +7,9 @@ import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.Delimiters;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.logging.LogLevel;
 
-public class ChatServerInitializer extends ChannelInitializer<SocketChannel> {
+public class ServerInitializer extends ChannelInitializer<SocketChannel> {
 
 	@Override
 	protected void initChannel(SocketChannel ch) throws Exception {
@@ -16,8 +17,7 @@ public class ChatServerInitializer extends ChannelInitializer<SocketChannel> {
 		pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
 		pipeline.addLast("decoder", new StringDecoder());
 		pipeline.addLast("encoder", new StringEncoder());
-		pipeline.addLast("handler", new ChatServerHandler());
-		System.out.println("ChatClient:" + ch.remoteAddress() + "连接上");
+		pipeline.addLast(new ChannelServerHandler(LogLevel.INFO));
 	}
 
 }

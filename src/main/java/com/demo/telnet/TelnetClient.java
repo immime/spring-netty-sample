@@ -13,6 +13,14 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 
+/**
+ * dos telnet test
+ * 1.telnet 127.0.0.1 8023
+ * 2.ctrl+]
+ * 3.o 127.0.0.1 8023
+ * @author weny
+ *
+ */
 public final class TelnetClient {
 	static final boolean SSL = System.getProperty("ssl") != null;
 	static final String HOST = System.getProperty("host", "127.0.0.1");
